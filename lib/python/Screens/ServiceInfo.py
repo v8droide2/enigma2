@@ -314,7 +314,9 @@ class ServiceInfo(Screen):
 					(_("Inversion, Pilot & Roll-off"), frontendData["inversion"] + " - " + str(frontendData.get("pilot", None)) + " - " + str(frontendData.get("rolloff", None)), TYPE_TEXT),
 					(_("Input Stream ID"), issy(frontendData.get("is_id", 0)), TYPE_VALUE_DEC),
 					(_("PLS Mode"), frontendData.get("pls_mode", None), TYPE_TEXT),
-					(_("PLS Code"), frontendData.get("pls_code", 0), TYPE_VALUE_DEC))
+					(_("PLS Code"), frontendData.get("pls_code", 0), TYPE_VALUE_DEC),
+					(_("T2MI PID"), issy(frontendData.get("t2mi_pid", -1)), TYPE_VALUE_DEC),
+					(_("PLP Code"), issy(frontendData.get("plp_code", -1)), TYPE_VALUE_DEC))
 			elif frontendDataOrg["tuner_type"] == "DVB-C":
 				return (tuner,
 					(_("Modulation"), frontendData["modulation"], TYPE_TEXT),

@@ -63,9 +63,17 @@ public:
 		PLS_Default_Gold_Code, PLS_Default_Root_Code
 	};
 
+	enum {
+		T2MI_Pid
+	};
+
+	enum {
+		PLP_Code
+	};
+
 	bool no_rotor_command_on_tune;
 	unsigned int frequency, symbol_rate;
-	int polarisation, fec, inversion, orbital_position, system, modulation, rolloff, pilot, is_id, pls_mode, pls_code;
+	int polarisation, fec, inversion, orbital_position, system, modulation, rolloff, pilot, is_id, pls_mode, pls_code, t2mi_pid, plp_code;
 };
 SWIG_ALLOW_OUTPUT_SIMPLE(eDVBFrontendParametersSatellite);
 
@@ -223,6 +231,8 @@ public:
 	int getIsId() const;
 	int getPLSMode() const;
 	int getPLSCode() const;
+	int getT2MIPid() const;
+	int getPLPCode() const;
 	int getBandwidth() const;
 	int getCodeRateLp() const;
 	int getCodeRateHp() const;
@@ -257,6 +267,8 @@ public:
 	int getIsId() const;
 	int getPLSMode() const;
 	int getPLSCode() const;
+	int getT2MIPid() const;
+	int getPLPCode() const;
 };
 
 class eDVBCableTransponderData : public eDVBTransponderData

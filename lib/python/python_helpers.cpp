@@ -107,6 +107,10 @@ void transponderDataToDict(ePyObject &dest, ePtr<iDVBTransponderData> data)
 		if (value >= 0) PutToDict(dest, "pls_mode", value);
 		value = data->getPLSCode();
 		if (value >= 0) PutToDict(dest, "pls_code", value);
+		value = data->getT2MIPid();
+		if (value >= -1) PutToDict(dest, "t2mi_pid", value);
+		value = data->getPLPCode();
+		if (value >= -1) PutToDict(dest, "plp_code", value);
 
 		/* additional terrestrial fields */
 		value = data->getBandwidth();

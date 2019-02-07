@@ -92,12 +92,16 @@ void eDVBFrontendParametersSatellite::set(const S2SatelliteDeliverySystemDescrip
 		is_id = descriptor.getInputStreamIdentifier();
 		pls_mode = eDVBFrontendParametersSatellite::PLS_Gold;
 		pls_code = descriptor.getScramblingSequenceIndex();
+		t2mi_pid = eDVBFrontendParametersSatellite::T2MI_Pid;
+		plp_code = eDVBFrontendParametersSatellite::PLP_Code;
 	}
 	else // default DVB-S2 physical layer scrambling sequence of index n = 0 is used
 	{
 		is_id = eDVBFrontendParametersSatellite::No_Stream_Id_Filter;
 		pls_mode = eDVBFrontendParametersSatellite::PLS_Gold;
 		pls_code = eDVBFrontendParametersSatellite::PLS_Default_Gold_Code;
+		t2mi_pid = eDVBFrontendParametersSatellite::T2MI_Pid;
+		plp_code = eDVBFrontendParametersSatellite::PLP_Code;
 	}
 }
 
@@ -128,9 +132,11 @@ void eDVBFrontendParametersSatellite::set(const SatelliteDeliverySystemDescripto
 	is_id = eDVBFrontendParametersSatellite::No_Stream_Id_Filter;
 	pls_mode = eDVBFrontendParametersSatellite::PLS_Gold;
 	pls_code = eDVBFrontendParametersSatellite::PLS_Default_Gold_Code;
+	t2mi_pid = eDVBFrontendParametersSatellite::T2MI_Pid;
+	plp_code = eDVBFrontendParametersSatellite::PLP_Code;
 	if (system == System_DVB_S2)
 	{
-		eDebug("[eDVBFrontendParametersSatellite] SAT DVB-S2 freq %d, %s, pos %d, sr %d, fec %d, modulation %d, rolloff %d, is_id %d, pls_mode %d, pls_code %d",
+		eDebug("[eDVBFrontendParametersSatellite] SAT DVB-S2 freq %d, %s, pos %d, sr %d, fec %d, modulation %d, rolloff %d, is_id %d, pls_mode %d, pls_code %d, t2mi_pid %d, plp_code %d",
 			frequency,
 			polarisation ? "hor" : "vert",
 			orbital_position,
@@ -139,7 +145,9 @@ void eDVBFrontendParametersSatellite::set(const SatelliteDeliverySystemDescripto
 			rolloff,
 			is_id,
 			pls_mode,
-			pls_code);
+			pls_code,
+			t2mi_pid,
+			plp_code);
 	}
 	else
 	{
@@ -367,6 +375,10 @@ RESULT eDVBFrontendParameters::calculateDifference(const iDVBFrontendParameters 
 			else if (sat.pls_mode != osat.pls_mode)
 				diff = 1<<27;
 			else if (sat.pls_code != osat.pls_code)
+				diff = 1<<27;
+			else if (sat.t2mi_pid != osat.t2mi_pid)
+				diff = 1<<27;
+			else if (sat.plp_code != osat.plp_code)
 				diff = 1<<27;
 			else if (exact && sat.fec != osat.fec && sat.fec != eDVBFrontendParametersSatellite::FEC_Auto && osat.fec != eDVBFrontendParametersSatellite::FEC_Auto)
 				diff = 1<<27;
@@ -2338,7 +2350,7 @@ RESULT eDVBFrontend::prepare_sat(const eDVBFrontendParametersSatellite &feparm, 
 	res = m_sec->prepare(*this, feparm, satfrequency, 1 << m_slotid, tunetimeout);
 	if (!res)
 	{
-		eDebugNoSimulate("[eDVBFrontend%d] prepare_sat System %d Freq %d Pol %d SR %d INV %d FEC %d orbpos %d system %d modulation %d pilot %d, rolloff %d, is_id %d, pls_mode %d, pls_code %d",
+		eDebugNoSimulate("[eDVBFrontend%d] prepare_sat System %d Freq %d Pol %d SR %d INV %d FEC %d orbpos %d system %d modulation %d pilot %d, rolloff %d, is_id %d, pls_mode %d, pls_code %d, t2mi_pid %d, plp_code %d",
 			m_dvbid,
 			feparm.system,
 			feparm.frequency,
@@ -2353,7 +2365,9 @@ RESULT eDVBFrontend::prepare_sat(const eDVBFrontendParametersSatellite &feparm, 
 			feparm.rolloff,
 			feparm.is_id,
 			feparm.pls_mode,
-			feparm.pls_code);
+			feparm.pls_code,
+			feparm.t2mi_pid,
+			feparm.plp_code);
 		if ((unsigned int)satfrequency < fe_info.frequency_min || (unsigned int)satfrequency > fe_info.frequency_max)
 		{
 			eDebugNoSimulate("[eDVBFrontend%d] %d mhz out of tuner range.. dont tune", m_dvbid, satfrequency / 1000);

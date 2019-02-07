@@ -173,6 +173,16 @@ int eDVBTransponderData::getPLSCode() const
 	return -1;
 }
 
+int eDVBTransponderData::getT2MIPid() const
+{
+	return -1;
+}
+
+int eDVBTransponderData::getPLPCode() const
+{
+	return -1;
+}
+
 int eDVBTransponderData::getBandwidth() const
 {
 	return -1;
@@ -368,6 +378,26 @@ int eDVBSatelliteTransponderData::getPLSCode() const
 	unsigned int stream_id = getProperty(DTV_STREAM_ID);
 	if (stream_id == NO_STREAM_ID_FILTER) return transponderParameters.pls_code;
 	return (stream_id >> 8) & 0x3FFFF;
+}
+
+int eDVBSatelliteTransponderData::getT2MIPid() const
+{
+	if (originalValues) return transponderParameters.t2mi_pid;
+
+	return eDVBFrontendParametersSatellite::T2MI_Pid;
+
+	if (t2mi_plp_id == eDVBFrontendParametersSatellite::T2MI_Pid) return transponderParameters.t2mi_pid;
+	return t2mi_pid;
+}
+
+int eDVBSatelliteTransponderData::getPLPCode() const
+{
+	if (originalValues) return transponderParameters.plp_code;
+
+	return eDVBFrontendParametersSatellite::PLP_Code; 
+
+	if (plp_code == eDVBFrontendParametersSatellite::PLP_Code) return transponderParameters.plp_code;
+	return plp_code;
 }
 
 DEFINE_REF(eDVBCableTransponderData);
